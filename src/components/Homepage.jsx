@@ -6,46 +6,68 @@ import "../css/homepage.css";
 import { useNavigate, useParams } from "react-router-dom";
 
 const Homepage = () => {
-  const [cityNames, setCityNames] = useState([
-    ["Kamakura", "JP"],
-    ["Torino", "IT"],
-    ["Dublino", "IE"],
-    ["Venezia", "IT"],
-    ["Cebu", "PHL"],
-  ]);
+  let initialCities = localStorage.getItem("cityNames").split(",") || [
+    "Kamakura-JP",
+    "Torino-IT",
+    "Dublino-IE",
+    "Venezia-IT",
+    "Cebu-PHL",
+  ];
+
+  // console.log("initialCities", initialCities);
+  const [cityNames, setCityNames] = useState(initialCities);
+  // let location = useLocation();
+  // "Cebu-PHL"[("Kamakura", "JP")],
+  // ["Torino", "IT"],
+  // ["Dublino", "IE"],
+  // ["Venezia", "IT"],
+  // ["Cebu", "PHL"],
   const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [cerca, setCerca] = useState("");
 
   let change;
 
-  // const changeStateCities = (newCity) => {
-  //   console.log("cityNamesFirst", cityNames);
-  //   cityNames.push(newCity);
-  //   setCityNames(cityNames);
-  //   console.log("cityNames", cityNames);
-  // };
+  const changeStateCities = (newCities) => {
+    setCityNames(newCities);
+    localStorage.setItem("cityNames", newCities);
+  };
+  // console.log("cityNamesFirst", cityNames);
+  // let citiesAlreadyPresent = cityNames;
+  // citiesAlreadyPresent.push(newCity);
+  // localStorage.setItem("cityNames", citiesAlreadyPresent);
+  // setCityNames(citiesAlreadyPresent);
+  // console.log("citiesAlreadyPresent", citiesAlreadyPresent);
 
-  // const params = useParams();
-  // // console.log("params", params);
-  // // console.log("params", params.length);
-  // useEffect(() => {
-  //   let newCityArray;
-  //   if (params.info) {
-  //     newCityArray = params.info.split(",");
-  //     let newCity = cityNames;
-  //     console.log(
-  //       "cityNames.includes(newCityArray)",
-  //       cityNames.includes(newCityArray)
-  //     );
-  //     if (cityNames.includes(newCityArray)) {
-  //       newCity.push(newCityArray);
-  //       // console.log("newCity", newCity);
-  //       setCityNames(newCity);
-  //       // console.log("cityNames", cityNames);
-  //     }
-  //   }
-  // }, [params]);
+  const params = useParams();
+  // console.log("params", params);
+  // console.log("params", params.length);
+  useEffect(() => {
+    let newCityArray;
+    if (params.info) {
+      newCityArray = params.info;
+      let newCity = cityNames;
+
+      if (!cityNames.includes(newCityArray)) {
+        newCity.push(newCityArray);
+        // console.log("newCity", newCity);
+        if (typeof cityNames === "string") {
+          newCity = cityNames.split(",");
+        }
+        changeStateCities(newCity);
+        // console.log("cityNames", cityNames);
+      }
+
+      // console.log(
+      //   "cityNames.includes(newCityArray)",
+      //   cityNames.includes(newCityArray),
+      //   "newCityArray",
+      //   newCityArray,
+      //   "cityNames",
+      //   cityNames
+      // );
+    }
+  }, [initialCities]);
 
   return (
     <section className="">
@@ -67,7 +89,7 @@ const Homepage = () => {
             e.preventDefault();
             change = input.split(", ");
             change.push("false");
-            change.join("-");
+            change.join(",");
             setCerca(change);
             navigate("/details/" + change);
           }}
@@ -84,29 +106,35 @@ const Homepage = () => {
         </Form>
       </div>
       <Container className="mt-5 backgroundRow" fluid>
+        <h1 className="text-center">I tuoi preferiti</h1>
         {cerca && (
           <Row className="mb-5 pb-5 border-bottom">
             <Col xs={12}>
               <MeteoCard
                 infoCity={cerca}
                 saved={false}
-                // changeStateCities={changeStateCities}
+                changeStateCities={changeStateCities}
                 // cityNames={cityNames}
               />
             </Col>
           </Row>
         )}
         <Row>
-          {Array.isArray(cityNames) &&
-            cityNames.map((name, i) => (
-              <Col xs={12} md={4} lg={3} key={i}>
+          {cityNames.map((name) => {
+            // console.log("name", name);
+            let nameCity = name.split("-")[0];
+            let iso = name.split("-")[1];
+            // console.log("name", name);
+            return (
+              <Col xs={12} md={4} lg={3} key={name}>
                 <MeteoCard
-                  infoCity={name}
+                  infoCity={[nameCity, iso]}
                   saved={true}
-                  // changeStateCities={changeStateCities}
+                  changeStateCities={changeStateCities}
                 />
               </Col>
-            ))}
+            );
+          })}
         </Row>
       </Container>
     </section>

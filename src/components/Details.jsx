@@ -1,11 +1,10 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import "../css/MeteoCard.css";
 import { useEffect, useState } from "react";
-import { Button, Badge, Container, Row, Col, Card } from "react-bootstrap";
+import { Button, Container, Row, Col, Card } from "react-bootstrap";
 
 const Details = () => {
   const params = useParams();
-  //   console.log("params", params);
   let name;
   let iso;
   let saved;
@@ -18,14 +17,13 @@ const Details = () => {
     iso = params.infoCity.split(",")[1];
     saved = params.infoCity.split(",")[2];
   }
-  const newCityInfo = name + "," + iso;
+  const newCityInfo = name + "-" + iso;
 
   const [infoMeteo, setInfoMeteo] = useState({});
   const [infoImage, setInfoImage] = useState({});
   const [appear, setAppear] = useState(false);
   const [alreadySaved, setAlreadySaved] = useState(saved === "true");
-
-  const navigate = useNavigate();
+  const [isRemoved, setIsRemoved] = useState(false);
 
   const endpointWeather = `https://api.openweathermap.org/data/2.5/weather?q=${name},${iso}&appid=f228e9b0d515a68c7300a9852019e205`;
   const getWeather = () => {
@@ -113,11 +111,11 @@ const Details = () => {
         <div className="my-5">
           <h5 className="mb-3">Other info</h5>
           <div>
-            <p>
+            <p className="mb-0">
               <span className="fw-bold">Humidity</span>: {infoMeteo.humidity}{" "}
               g/m^3
             </p>
-            <p>
+            <p className="mb-0">
               <span className="fw-bold">Pressure</span>: {infoMeteo.pressure} Pa
             </p>
             <p>
@@ -127,27 +125,56 @@ const Details = () => {
           </div>
         </div>
       </div>
-      {/* {!alreadySaved && (
+      {!alreadySaved && (
         <Button
           variant="primary"
-          className="align-self-center"
+          className="align-self-center mb-2"
           onClick={() => {
             setAlreadySaved(true);
             setAppear(true);
-            // console.log("infoCity", infoCity);
-            // changeStateCities(infoCity);
-            navigate("/" + newCityInfo);
+            let cities = localStorage.getItem("cityNames").split(",");
+            console.log("newCityInfo", newCityInfo);
+            cities.push(newCityInfo);
+            console.log("cities", cities);
+            localStorage.setItem("cityNames", cities);
+            setIsRemoved(false);
+            // navigate("/" + newCityInfo);
           }}
         >
           Salva città
         </Button>
       )}
-
-      {appear && (
-        <Button variant="success" className="align-self-center px-3">
-          Salvato!
+      {alreadySaved && !isRemoved && (
+        <Button
+          variant="danger"
+          className="align-self-center mb-2"
+          onClick={() => {
+            let initialCities = localStorage.getItem("cityNames").split(",");
+            let index = initialCities.indexOf(name + "-" + iso);
+            initialCities.splice(index, 1);
+            localStorage.setItem("cityNames", initialCities);
+            setIsRemoved(true);
+            setAlreadySaved(false);
+            setAppear(false);
+          }}
+        >
+          Rimuovi
         </Button>
-      )} */}
+      )}
+
+      {isRemoved && (
+        <Button variant="success" className="align-self-center px-3">
+          Rimosso
+        </Button>
+      )}
+      {appear && (
+        <Link
+          to="/"
+          className="align-self-center px-3 bg-success text-decoration-none text-white text-center rounded-2 py-2"
+        >
+          Salvato! <br /> Torna in Homepage
+        </Link>
+      )}
       <Container>
         <h1>Previsioni future</h1>
 
