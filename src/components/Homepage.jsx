@@ -17,8 +17,6 @@ const Homepage = () => {
   const [input, setInput] = useState("");
   const [cerca, setCerca] = useState("");
 
-  console.log("cityNames", cityNames);
-
   let change;
 
   // const changeStateCities = (newCity) => {

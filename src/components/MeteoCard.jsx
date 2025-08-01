@@ -66,7 +66,7 @@ const MeteoCard = ({ infoCity, saved, changeStateCities }) => {
               {(infoMeteo.temp_max - 273.15).toFixed(1)}°C
             </Card.Text>
           </div>
-          {!alreadySaved && (
+          {/* {!alreadySaved && (
             <Button
               variant="primary"
               className="align-self-center"
@@ -86,7 +86,7 @@ const MeteoCard = ({ infoCity, saved, changeStateCities }) => {
             <Button variant="success" className="align-self-center px-3">
               Salvato!
             </Button>
-          )}
+          )} */}
         </Card.Body>
       </Card>
     </>

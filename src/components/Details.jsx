@@ -153,7 +153,6 @@ const Details = () => {
 
         {infoForecast[0] &&
           dates.map((date) => {
-            console.log("Sono dentro dates!");
             return (
               <Row key={date} className="my-4">
                 <h3>{date}</h3>
@@ -199,31 +198,3 @@ const Details = () => {
 };
 
 export default Details;
-
-// <Row>
-//   {infoForecast[0] &&
-//     infoForecast.map((info) => {
-//       return (
-//         <Col xs={12} sm={6} md={4} lg={3} key={info.dt_txt}>
-//           <Card>
-//             <Card.Img className={info.weather[0].main} />
-//             <Card.Body>
-//               {/* <Card.Title>{info.dt_txt.split(" ")[0]}</Card.Title> */}
-//               <Card.Title>{dates[0]}</Card.Title>
-//               <Card.Text>{info.dt_txt.split(" ")[1]}</Card.Text>
-//               <Card.Text>
-//                 <span className="fw-bold">Weather</span>:{" "}
-//                 {info.weather[0].description}
-//               </Card.Text>
-//               <Card.Text>
-//                 <span className="fw-bold">Min temperature: </span>
-//                 {(info.main.temp_min - 273.15).toFixed(1)}°C <br />
-//                 <span className="fw-bold">Max temperature: </span>
-//                 {(info.main.temp_max - 273.15).toFixed(1)}°C
-//               </Card.Text>
-//             </Card.Body>
-//           </Card>
-//         </Col>
-//       );
-//     })}
-// </Row>
