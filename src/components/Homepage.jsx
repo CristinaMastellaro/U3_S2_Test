@@ -1,8 +1,9 @@
 import { Form, Container, Row, Col } from "react-bootstrap";
 import HeroSection from "./HeroSection";
 import MeteoCard from "./MeteoCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../css/homepage.css";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Homepage = () => {
   const [cityNames, setCityNames] = useState([
@@ -12,15 +13,41 @@ const Homepage = () => {
     ["Venezia", "IT"],
     ["Cebu", "PHL"],
   ]);
-
+  const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [cerca, setCerca] = useState("");
 
-  const changeStateCities = (newCity) => {
-    console.log("cityNamesFirst", cityNames);
-    setCityNames(cityNames.push(newCity));
-    console.log("cityNames", cityNames);
-  };
+  console.log("cityNames", cityNames);
+
+  let change;
+
+  // const changeStateCities = (newCity) => {
+  //   console.log("cityNamesFirst", cityNames);
+  //   cityNames.push(newCity);
+  //   setCityNames(cityNames);
+  //   console.log("cityNames", cityNames);
+  // };
+
+  // const params = useParams();
+  // // console.log("params", params);
+  // // console.log("params", params.length);
+  // useEffect(() => {
+  //   let newCityArray;
+  //   if (params.info) {
+  //     newCityArray = params.info.split(",");
+  //     let newCity = cityNames;
+  //     console.log(
+  //       "cityNames.includes(newCityArray)",
+  //       cityNames.includes(newCityArray)
+  //     );
+  //     if (cityNames.includes(newCityArray)) {
+  //       newCity.push(newCityArray);
+  //       // console.log("newCity", newCity);
+  //       setCityNames(newCity);
+  //       // console.log("cityNames", cityNames);
+  //     }
+  //   }
+  // }, [params]);
 
   return (
     <section className="">
@@ -40,7 +67,11 @@ const Homepage = () => {
         <Form
           onSubmit={(e) => {
             e.preventDefault();
-            setCerca(input.split(", "));
+            change = input.split(", ");
+            change.push("false");
+            change.join("-");
+            setCerca(change);
+            navigate("/details/" + change);
           }}
         >
           <Form.Control
@@ -61,21 +92,23 @@ const Homepage = () => {
               <MeteoCard
                 infoCity={cerca}
                 saved={false}
-                changeStateCities={changeStateCities}
+                // changeStateCities={changeStateCities}
+                // cityNames={cityNames}
               />
             </Col>
           </Row>
         )}
         <Row>
-          {cityNames.map((name) => (
-            <Col xs={12} md={4} lg={3} key={name}>
-              <MeteoCard
-                infoCity={name}
-                saved={true}
-                changeStateCities={changeStateCities}
-              />
-            </Col>
-          ))}
+          {Array.isArray(cityNames) &&
+            cityNames.map((name, i) => (
+              <Col xs={12} md={4} lg={3} key={i}>
+                <MeteoCard
+                  infoCity={name}
+                  saved={true}
+                  // changeStateCities={changeStateCities}
+                />
+              </Col>
+            ))}
         </Row>
       </Container>
     </section>

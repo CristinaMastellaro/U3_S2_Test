@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, Button, Badge } from "react-bootstrap";
 import "../css/MeteoCard.css";
+import { useNavigate } from "react-router-dom";
 
 const MeteoCard = ({ infoCity, saved, changeStateCities }) => {
   // const MeteoCard = (props) => {
@@ -10,13 +11,14 @@ const MeteoCard = ({ infoCity, saved, changeStateCities }) => {
   const [infoImage, setInfoImage] = useState({});
   const [appear, setAppear] = useState(false);
   const [alreadySaved, setAlreadySaved] = useState(saved);
-  let backgroundImage = "sunny";
+
+  const navigate = useNavigate();
 
   const getForecast = () => {
     fetch(endpoint)
       .then((res) => {
         if (res.ok) {
-          console.log("infoCity", infoCity);
+          // console.log("infoCity", infoCity);
           return res.json();
         } else {
           throw new Error("Non siamo riusciti a contattare l'API");
@@ -26,32 +28,24 @@ const MeteoCard = ({ infoCity, saved, changeStateCities }) => {
         // console.log("data", data);
         setInfoMeteo(data.main);
         setInfoImage(data.weather[0]);
-        switch (infoImage.main) {
-          case "Clouds":
-            backgroundImage = "cloudy";
-            break;
-          case "Rain":
-            backgroundImage = "rainy";
-            break;
-          case "Clear":
-            backgroundImage = "sunny";
-            break;
-        }
-        // console.log("infoMeteo", infoMeteo);
-        // console.log("infoImage", infoImage);
-        // console.log("infoImage.main", infoImage.main);
-        console.log("backgroundImage", backgroundImage);
+        console.log("infoMeteo", infoMeteo);
+        console.log("infoImage", infoImage);
       })
       .catch((err) => console.log("Errore!", err));
   };
 
   useEffect(() => {
     getForecast();
-  }, [infoCity[0], backgroundImage]);
+  }, [infoCity[0]]);
 
   return (
     <>
-      <Card className="my-4">
+      <Card
+        className="my-4"
+        onClick={() => {
+          navigate("/details/" + infoCity.join("-") + "-" + infoImage.main);
+        }}
+      >
         {/* <Card className={backgroundImage}> */}
         <Card.Img className={infoImage.main} />
         <Card.Body className="d-flex flex-column justify-content-between my-2 p-3">
@@ -79,7 +73,9 @@ const MeteoCard = ({ infoCity, saved, changeStateCities }) => {
               onClick={() => {
                 setAlreadySaved(true);
                 setAppear(true);
-                changeStateCities(infoCity);
+                console.log("infoCity", infoCity);
+                // changeStateCities(infoCity);
+                navigate("/");
               }}
             >
               Salva città
