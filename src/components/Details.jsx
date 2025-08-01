@@ -47,10 +47,12 @@ const Details = () => {
   };
 
   const [infoForecast, setInfoForecast] = useState({});
+  const [dates, setDates] = useState([]);
   //   console.log("infoForecast", infoForecast);
-  let dates = [];
+  //   let dates = [];
 
   const endpointForecast = `https://api.openweathermap.org/data/2.5/forecast?q=${name},${iso}&appid=f228e9b0d515a68c7300a9852019e205`;
+
   const getForecast = () => {
     fetch(endpointForecast)
       .then((res) => {
@@ -62,17 +64,17 @@ const Details = () => {
         }
       })
       .then((data) => {
-        console.log("data", data.list[0]);
+        // console.log("data", data.list[0]);
         setInfoForecast(data.list);
-        console.log("infoForecast", infoForecast[0]);
-        infoForecast.forEach((single) => {
-          if (!dates.includes(single.dt_txt.split(" ")[0])) {
-            dates.push(single.dt_txt.split(" ")[0]);
+        let singleDates = dates;
+        // console.log("infoForecast", infoForecast[0]);
+
+        data.list.map((single) => {
+          if (!singleDates.includes(single.dt_txt.split(" ")[0])) {
+            singleDates.push(single.dt_txt.split(" ")[0]);
           }
         });
-        console.log("dates", dates);
-
-        // infoForecast.forEach((s) => console.log(s.dt));
+        setDates(singleDates);
       })
       .catch((err) => console.log("Errore!", err));
   };
@@ -147,44 +149,25 @@ const Details = () => {
         </Button>
       )} */}
       <Container>
-        <Row>
-          <h1>Previsioni future</h1>
-          {infoForecast[0] &&
-            infoForecast.map((info) => {
-              return (
-                <Col xs={12} sm={6} md={4} lg={3} key={info.dt_txt}>
-                  <Card>
-                    <Card.Img className={info.weather[0].main} />
-                    <Card.Body>
-                      <Card.Title>{info.dt_txt.split(" ")[0]}</Card.Title>
-                      <Card.Text>{info.dt_txt.split(" ")[1]}</Card.Text>
-                      <Card.Text>
-                        <span className="fw-bold">Weather</span>:{" "}
-                        {info.weather[0].description}
-                      </Card.Text>
-                      <Card.Text>
-                        <span className="fw-bold">Min temperature: </span>
-                        {(info.main.temp_min - 273.15).toFixed(1)}°C <br />
-                        <span className="fw-bold">Max temperature: </span>
-                        {(info.main.temp_max - 273.15).toFixed(1)}°C
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              );
-            })}
-        </Row>
+        <h1>Previsioni future</h1>
 
-        {/* {infoForecast[0] &&
+        {infoForecast[0] &&
           dates.map((date) => {
             console.log("Sono dentro dates!");
             return (
-              <Row>
+              <Row key={date} className="my-4">
                 <h3>{date}</h3>
                 {infoForecast.map((info) => {
-                  if (info.dt_txt.split(" ")[0] === date) {
+                  if (info.dt_txt.split(" ")[0] == date) {
                     return (
-                      <Col xs={12} sm={6} md={4} lg={3} key={info.dt_txt}>
+                      <Col
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        lg={3}
+                        key={info.dt_txt}
+                        className="my-2"
+                      >
                         <Card>
                           <Card.Img className={info.weather[0].main} />
                           <Card.Body>
@@ -205,16 +188,42 @@ const Details = () => {
                         </Card>
                       </Col>
                     );
-                  } else {
-                    return <h2>Ciao</h2>;
                   }
                 })}
               </Row>
             );
-          })} */}
+          })}
       </Container>
     </section>
   );
 };
 
 export default Details;
+
+// <Row>
+//   {infoForecast[0] &&
+//     infoForecast.map((info) => {
+//       return (
+//         <Col xs={12} sm={6} md={4} lg={3} key={info.dt_txt}>
+//           <Card>
+//             <Card.Img className={info.weather[0].main} />
+//             <Card.Body>
+//               {/* <Card.Title>{info.dt_txt.split(" ")[0]}</Card.Title> */}
+//               <Card.Title>{dates[0]}</Card.Title>
+//               <Card.Text>{info.dt_txt.split(" ")[1]}</Card.Text>
+//               <Card.Text>
+//                 <span className="fw-bold">Weather</span>:{" "}
+//                 {info.weather[0].description}
+//               </Card.Text>
+//               <Card.Text>
+//                 <span className="fw-bold">Min temperature: </span>
+//                 {(info.main.temp_min - 273.15).toFixed(1)}°C <br />
+//                 <span className="fw-bold">Max temperature: </span>
+//                 {(info.main.temp_max - 273.15).toFixed(1)}°C
+//               </Card.Text>
+//             </Card.Body>
+//           </Card>
+//         </Col>
+//       );
+//     })}
+// </Row>
