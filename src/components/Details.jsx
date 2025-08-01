@@ -170,8 +170,7 @@ const Details = () => {
                         <Card>
                           <Card.Img className={info.weather[0].main} />
                           <Card.Body>
-                            <Card.Title>{info.dt_txt.split(" ")[0]}</Card.Title>
-                            <Card.Text>{info.dt_txt.split(" ")[1]}</Card.Text>
+                            <Card.Title>{info.dt_txt.split(" ")[1]}</Card.Title>
                             <Card.Text>
                               <span className="fw-bold">Weather</span>:{" "}
                               {info.weather[0].description}
