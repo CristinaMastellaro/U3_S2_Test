@@ -1,0 +1,11 @@
+#heroSection {
+  background-image: url("https://wallpapers.com/images/hd/weather-scenarios-collage-dbk9c5n23l7e5fgb.jpg");
+  background-size: cover;
+  background-position-y: center;
+  color: white;
+  height: 400px;
+}
+
+#containerTitle {
+  background-color: #07081a;
+}

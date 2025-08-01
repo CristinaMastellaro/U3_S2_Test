@@ -46,8 +46,6 @@ const Details = () => {
 
   const [infoForecast, setInfoForecast] = useState({});
   const [dates, setDates] = useState([]);
-  //   console.log("infoForecast", infoForecast);
-  //   let dates = [];
 
   const endpointForecast = `https://api.openweathermap.org/data/2.5/forecast?q=${name},${iso}&appid=f228e9b0d515a68c7300a9852019e205`;
 
@@ -55,17 +53,14 @@ const Details = () => {
     fetch(endpointForecast)
       .then((res) => {
         if (res.ok) {
-          // console.log("infoCity", infoCity);
           return res.json();
         } else {
           throw new Error("Non siamo riusciti a contattare l'API");
         }
       })
       .then((data) => {
-        // console.log("data", data.list[0]);
         setInfoForecast(data.list);
         let singleDates = dates;
-        // console.log("infoForecast", infoForecast[0]);
 
         data.list.map((single) => {
           if (!singleDates.includes(single.dt_txt.split(" ")[0])) {
@@ -80,6 +75,7 @@ const Details = () => {
   useEffect(() => {
     getWeather();
     getForecast();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -138,7 +134,6 @@ const Details = () => {
             console.log("cities", cities);
             localStorage.setItem("cityNames", cities);
             setIsRemoved(false);
-            // navigate("/" + newCityInfo);
           }}
         >
           Salva città
