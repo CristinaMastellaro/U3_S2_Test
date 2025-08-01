@@ -1,0 +1,25 @@
+.Clear {
+  background-image: url("https://t3.ftcdn.net/jpg/00/68/79/54/360_F_68795433_fjQuxeXBgS8WwBimyZgFcfIFFA5pRacx.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.Rain {
+  background-image: url("https://c4.wallpaperflare.com/wallpaper/291/32/969/rain-beautiful-desktop-wallpaper-preview.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.Clouds {
+  background-image: url("https://wallpapers.com/images/hd/clouds-phone-1440-x-2560-5n19iho3rlj4h7m7.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.card {
+  min-height: 350px;
+}
+
+img {
+  height: 200px;
+}
